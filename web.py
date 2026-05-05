@@ -15,7 +15,6 @@ def aplicar_estilos_botones(colores):
     """
     st.markdown(estilo, unsafe_allow_html=True)
 
-@st.cache_data
 def cargar_preguntas():
     lista = []
     try:
@@ -68,7 +67,7 @@ def pasar_siguiente():
 if st.session_state.estado == 'menu':
     st.title("🐂 Simulador Naranjitos")
     st.write(f"Preguntas disponibles: {len(banco)}")
-    cantidad = st.number_input("¿Cuántas preguntas?", 1, len(banco), 30)
+    cantidad = st.number_input("¿Cuántas preguntas?", min_value=1, max_value=len(banco), value=min(100, len(banco)))
     st.button("Empezar Test", use_container_width=True, type="primary", on_click=empezar_test, args=(cantidad,))
 
 elif st.session_state.estado == 'jugando':
