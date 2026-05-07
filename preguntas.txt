@@ -128,7 +128,7 @@ Indica cuál es una piscina municipal:|a - CD Amaya.|b - CD San Juan.|c - CD Ara
 ¿Cuándo se realiza el tradicional encierro?|a - Del 6 al 17 de julio a las 08.00 horas.|b - del 7 al 16 de julio a las 10.00 horas.|c - Del 7 al 14 de julio a las 08.00 horas.|c
 ¿Cómo se llama el graderío más cercano al ruedo en la plaza de toros?|a - Tendido.|b - Andanada.|c - Gallinero.|a
 Línea de transporte urbano que une Rochapea con la UPNA:|a - 15|b - 14|c - 6|c
-¿Desde dónde y cuándo se lanzan los fuegos artificiales en San Fermín?|A. Del 6 al 14 de julio a las 22:00 h|B. Del 6 al 14 de julio a las 23:00 h|C. Del 7 al 14 de julio a las 23:00 h|c
+¿Desde dónde y cuándo se lanzan los fuegos artificiales en San Fermín?|A. Del 6 al 14 de julio a las 22:00 h|B. Del 6 al 14 de julio a las 23:00 h|C. Del 7 al 14 de julio a las 23:00 h|b
 ¿Cuál era el número de habitantes de Pamplona en enero de 2016?|A. 157.325|B. 117.849|C. 199.403|c
 ¿En qué pareja de barrios NO se encuentra el estacionamiento regulado?|A. Segundo Ensanche y Milagrosa|B. Chantrea y Mendillorri|C. Azpilagaña y Mendebaldea|b
 ¿En qué barrio se encuentra situada la Plaza de Pío Baroja?|A. Rochapea|B. San Juan|C. Ermitagaña|c
