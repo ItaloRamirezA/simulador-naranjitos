@@ -1,10 +1,10 @@
 import streamlit as st
 import random
 
-# Configuración de página para móvil
+# Configuración de página
 st.set_page_config(page_title="Simulador San Fermín", page_icon="🐂", layout="centered")
 
-# CSS para los colores de los botones
+# CSS para colores de botones
 def aplicar_estilos_botones(colores):
     estilo = f"""
         <style>
@@ -15,6 +15,7 @@ def aplicar_estilos_botones(colores):
     """
     st.markdown(estilo, unsafe_allow_html=True)
 
+# Cargamos sin caché para que los cambios en el txt sean instantáneos
 def cargar_preguntas():
     lista = []
     try:
@@ -22,25 +23,18 @@ def cargar_preguntas():
             for l in f:
                 d = l.strip().split("|")
                 if len(d) == 5:
-                    # Guardamos la respuesta limpia de espacios
-                    lista.append({
-                        "p": d[0], 
-                        "o": [d[1], d[2], d[3]], 
-                        "c": d[4].strip().lower() 
-                    })
+                    lista.append({"p": d[0], "o": [d[1], d[2], d[3]], "c": d[4].strip().lower()})
     except: pass
     return lista
 
 banco = cargar_preguntas()
 
-# Estado de la sesión
 if 'estado' not in st.session_state:
     st.session_state.update({
         'estado': 'menu', 'sesion': [], 'indice': 0, 
         'aciertos': 0, 'respondida': False, 'eleccion': None, 'mensaje': ("", "")
     })
 
-# --- CALLBACKS ---
 def empezar_test(cantidad):
     limite = max(1, min(len(banco), cantidad))
     st.session_state.update({
@@ -67,6 +61,7 @@ def pasar_siguiente():
 if st.session_state.estado == 'menu':
     st.title("🐂 Simulador Naranjitos")
     st.write(f"Preguntas disponibles: {len(banco)}")
+    # Valor por defecto: 100
     cantidad = st.number_input("¿Cuántas preguntas?", min_value=1, max_value=len(banco), value=min(100, len(banco)))
     st.button("Empezar Test", use_container_width=True, type="primary", on_click=empezar_test, args=(cantidad,))
 
@@ -80,9 +75,9 @@ elif st.session_state.estado == 'jugando':
     colores = ["#333", "#333", "#333"]
     if st.session_state.respondida:
         idx_map = {'a': 0, 'b': 1, 'c': 2}
-        colores[idx_map[correcta]] = "#2ecc71" # Verde la correcta
+        colores[idx_map[correcta]] = "#2ecc71"
         if st.session_state.eleccion != correcta:
-            colores[idx_map[st.session_state.eleccion]] = "#e74c3c" # Rojo la elegida mal
+            colores[idx_map[st.session_state.eleccion]] = "#e74c3c"
             
     aplicar_estilos_botones(colores)
 
@@ -92,18 +87,27 @@ elif st.session_state.estado == 'jugando':
 
     if st.session_state.respondida:
         msg, tipo = st.session_state.mensaje
-        
-        # Forma correcta y segura de mostrar mensajes en Streamlit
-        if tipo == "success":
-            st.success(msg)
-        else:
-            st.error(msg)
-            
+        if tipo == "success": st.success(msg)
+        else: st.error(msg)
         st.button("Siguiente Pregunta ➡️", use_container_width=True, type="primary", on_click=pasar_siguiente)
 
 elif st.session_state.estado == 'resultado':
-    st.title("🎉 Resultados")
+    st.title("🎉 Resultados Finales")
+    
     total = len(st.session_state.sesion)
-    nota = (st.session_state.aciertos / total) * 10
-    st.metric("Nota Final", f"{nota:.1f} / 10", f"{st.session_state.aciertos} aciertos")
+    aciertos = st.session_state.aciertos
+    fallos = total - aciertos
+    
+    # Lógica de penalización: 3 mal restan 1 bien
+    puntos_netos = aciertos - (fallos / 3)
+    nota = (max(0, puntos_netos) / total) * 10
+    
+    st.metric("Nota Final (Con penalización)", f"{nota:.2f} / 10")
+    
+    col1, col2 = st.columns(2)
+    col1.metric("Aciertos ✅", aciertos)
+    col2.metric("Fallos ❌", fallos)
+    
+    st.info(f"Cada fallo ha restado 0.33 puntos. Puntos netos: {max(0, puntos_netos):.2f} de {total}")
+    
     st.button("Volver al Inicio", use_container_width=True, on_click=lambda: st.session_state.update({'estado': 'menu'}))
